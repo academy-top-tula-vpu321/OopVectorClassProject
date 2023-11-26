@@ -127,6 +127,83 @@ inline void Vector<T>::Clear()
 }
 
 template<class T>
+inline void Vector<T>::PushBack(T value)
+{
+	if (size >= capacity)
+		Reserve(capacity + size / 2);
+	array[size++] = value;
+}
+
+template<class T>
+inline void Vector<T>::PushFront(T value)
+{
+	if (size >= capacity)
+		Reserve(capacity + size / 2);
+	for (int i = size - 1; i >= 0; i--)
+		array[i + 1] = array[i];
+	array[0] = value;
+	size++;
+}
+
+template<class T>
+inline void Vector<T>::Insert(size_t index, T value)
+{
+	if (size >= capacity)
+		Reserve(capacity + size / 2);
+	if (index <= 0)
+	{
+		PushFront(value);
+		return;
+	}
+	if (index >= size)
+	{
+		PushBack(value);
+		return;
+	}
+	for (int i = size - 1; i >= index; i++)
+		array[i + 1] = array[i];
+	array[index] = value;
+	size++;
+}
+
+template<class T>
+inline T Vector<T>::PopBack()
+{
+	T value = array[--size];
+	if (capacity > (size + size / 2))
+		Reserve(size + size / 2);
+	return value;
+}
+
+template<class T>
+inline T Vector<T>::PopFront()
+{
+	T value = array[0];
+	for (int i{}; i < size - 1; i++)
+		array[i] = array[i + 1];
+	if (capacity > (size + size / 2))
+		Reserve(size + size / 2);
+	size--;
+	return value;
+}
+
+template<class T>
+inline T Vector<T>::Remove(size_t index)
+{
+	if (index <= 0)
+		return PopFront();
+	if (index >= size)
+		return PopBack();
+
+	T value = array[index];
+	for (int i{ index }; i < size - 1; i++)
+		array[i] = array[i + 1];
+	if (capacity > (size + size / 2))
+		Reserve(size + size / 2);
+	return value;
+}
+
+template<class T>
 Vector<T>::~Vector() { if (array) delete[] array; }
 
 
