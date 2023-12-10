@@ -1,6 +1,9 @@
 #pragma once
+template <typename T>
+class VectorIterator;
 
-template <class T>
+
+template <typename T>
 class Vector
 {
 	T* array;
@@ -38,9 +41,27 @@ public:
 	void Resize(size_t size);
 	void Resize(size_t size, T value);
 
+	VectorIterator<T> Iterator();
 
 
 	~Vector();
+};
+
+template <typename T>
+class VectorIterator
+{
+	Vector<T>* container;
+	int index;
+public:
+	VectorIterator(Vector<T>* container)
+		: container{ container }, index{ -1 } {}
+	~VectorIterator() {};
+
+	void SetBegin();
+	bool Next();
+	T Current();
+
+	bool IsEnd();
 };
 
 #include "Vector.inl"

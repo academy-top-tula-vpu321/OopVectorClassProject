@@ -1,4 +1,5 @@
 #pragma once
+#include <cassert>
 #include "Vector.h"
 
 template <class T>
@@ -40,7 +41,7 @@ inline Vector<T>& Vector<T>::operator=(const Vector<T>& v)
 template<class T>
 inline T Vector<T>::At(size_t index)
 {
-	assert(index < 0 || index >= size);
+	//assert(index < 0 || index >= size);
 	return array[index];
 }
 
@@ -203,7 +204,40 @@ inline T Vector<T>::Remove(size_t index)
 	return value;
 }
 
+template<typename T>
+inline VectorIterator<T> Vector<T>::Iterator()
+{
+	return VectorIterator<T>(this);
+}
+
 template<class T>
 Vector<T>::~Vector() { if (array) delete[] array; }
 
+template<typename T>
+void VectorIterator<T>::SetBegin()
+{
+	index = 0;
+}
 
+template<typename T>
+inline bool VectorIterator<T>::Next()
+{
+	if (this->index < (int)(container->Size()) - 1)
+	{
+		this->index++;
+		return true;
+	}
+	return false;
+}
+
+template<typename T>
+T VectorIterator<T>::Current()
+{
+	return container->At(index);
+}
+
+template<typename T>
+inline bool VectorIterator<T>::IsEnd()
+{
+	return index >= container->Size() - 1;
+}
